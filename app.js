@@ -1,18 +1,18 @@
 'use strict';
 
 // Import statements
-const express = require('express');
-const jsonParser = require('body-parser').json;
+const express     = require('express');
+const jsonParser  = require('body-parser').json;
+const routes      = require('./routes');
 
 // Set up the express app
 const app = express();
 
+// Set up the body parser
+app.use(jsonParser());
 
-app.use(function(req, res, next) {
-  console.log('The leaves on the trees are ', req.query.color );
-  next();
-});
-
+// Set up the router and the entry point: /questions
+app.use('/questions', routes);
 
 // Set up the port
 const port = process.env.PORT || 3000;
