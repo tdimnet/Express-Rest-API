@@ -2,13 +2,14 @@
 
 // Import statements
 const express = require('express');
+const jsonParser = require('body-parser').json;
 
 // Set up the express app
 const app = express();
 
 
 app.use(function(req, res, next) {
-  console.log('The leaves on the trees are ', req.query.color);
+  console.log('The leaves on the trees are ', req.query.color );
   next();
 });
 
