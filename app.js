@@ -2,13 +2,17 @@
 
 // Import statements
 const express     = require('express');
-const jsonParser  = require('body-parser').json;
-const routes      = require('./routes');
-
 // Set up the express app
-const app = express();
+const app         = express();
+// Import the route endpoints
+const routes      = require('./routes');
+// Import body parser and logger
+const jsonParser  = require('body-parser').json;
+const logger      = require('morgan');
 
-// Set up the body parser
+
+// Set up logger and body parser (for json encode)
+app.use(logger('dev'));
 app.use(jsonParser());
 
 // Set up the router and the entry point: /questions
