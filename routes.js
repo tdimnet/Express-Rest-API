@@ -53,5 +53,16 @@ router.put('/:qID/answers/:aID', function (req, res) {
   });
 });
 
+
+// DELETE /questions/:qID/answers/:aID
+  // Edit a specific answer
+router.delete('/:qID/answers/:aID', function (req, res) {
+  res.json({
+    response: "You sent me a DELETE request to a specific answer",
+    questionId: req.params.qID,
+    answerId: req.params.aID,
+  });
+});
+
 // Exporting the router
 module.exports = router;
