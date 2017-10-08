@@ -55,12 +55,25 @@ router.put('/:qID/answers/:aID', function (req, res) {
 
 
 // DELETE /questions/:qID/answers/:aID
-  // Edit a specific answer
+  // Delete a specific answer
 router.delete('/:qID/answers/:aID', function (req, res) {
   res.json({
     response: "You sent me a DELETE request to a specific answer",
     questionId: req.params.qID,
     answerId: req.params.aID,
+  });
+});
+
+
+// POST /questions/:qID/answers/:aID/vote-up
+// POST /questions/:qID/answers/:aID/vote-down
+  // Vote on a specific answer
+router.post('/:qID/answers/:aID/vote-:dir', function (req, res) {
+  res.json({
+    response: "You sent me a POST request to /vote-" + req.params.dir,
+    questionId: req.params.qID,
+    answerId: req.params.aID,
+    vote: req.params.dir
   });
 });
 
