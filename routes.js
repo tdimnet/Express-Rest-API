@@ -23,12 +23,33 @@ router.post('/', function (req, res) {
   });
 });
 
-// GET /questions/:id
+// GET /questions/:qID
   // Route for returning a specific question
-router.get('/:id', function (req, res) {
+router.get('/:qID', function (req, res) {
   res.json({
-    response: "You sent me a GET request for a specific ID " + req.params.id,
+    response: "You sent me a GET request for a specific ID " + req.params.qID,
+  });
+});
 
+// POST /questions/:qID/answers
+  // Route for creating an answer
+router.post('/:qID/answers', function (req, res) {
+  res.json({
+    response: "You sent me a POST request to /answers",
+    questionId: req.params.qID,
+    body: req.body
+  });
+});
+
+
+// PUT /questions/:qID/answers/:aID
+  // Edit a specific answer
+router.put('/:qID/answers/:aID', function (req, res) {
+  res.json({
+    response: "You sent me a PUT request to a specific answer",
+    questionId: req.params.qID,
+    answerId: req.params.aID,
+    body: req.body
   });
 });
 
