@@ -18,6 +18,24 @@ app.use(jsonParser());
 // Set up the router and the entry point: /questions
 app.use('/questions', routes);
 
+// Catching up 404 erros
+app.use(function (req, res, next) {
+  const err = new Error('Not found!');
+  err.status = 404;
+  next(err);
+});
+
+// Error Handler
+app.use(function (err, req, res, next) {
+  res.status(err.status  || 500);
+  res.json({
+    error: {
+      message: err.message
+    }
+  });
+});
+
+
 // Set up the port
 const port = process.env.PORT || 3000;
 
