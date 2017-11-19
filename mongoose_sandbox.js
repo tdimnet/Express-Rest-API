@@ -32,7 +32,12 @@ db.once('open', function() {
     name    : 'Lawrence'
   });
 
-  elephant.save();
+  elephant.save(function(err) {
+    if (err) console.error('Save Failed', err);
+    else console.log('Saved!');
+    db.close(function() {
+      console.log('db connection closed');
+    });
+  });
 
-  db.close();
 });
