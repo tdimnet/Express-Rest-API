@@ -13,9 +13,26 @@ db.on('error', function(err) {
 db.once('open', function() {
   console.log('db connection successful');
   // All database communcation goes here
-  var Schema = mongoose.Schema;
-  var AnimalSchema = new Schema({});
+  const Schema = mongoose.Schema;
+  const AnimalSchema = new Schema({
+    type    : String,
+    size    : String,
+    color   : String,
+    mass    : Number,
+    name    : String
+  });
 
+  const Animal = mongoose.model('Animal', AnimalSchema);
+
+  const elephant = new Animal({
+    type    : 'elephant',
+    size    : 'big',
+    color   : 'gray',
+    mass    : 6000,
+    name    : 'Lawrence'
+  });
+
+  elephant.save();
 
   db.close();
 });
