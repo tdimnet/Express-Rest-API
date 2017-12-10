@@ -9,6 +9,19 @@ const router = express.Router();
 // Importing questions model
 const questions = require('./models').Question;
 
+router.params('qID', function(req, res, next, id) {
+  Question.findById(id, function(err, doc) {
+    if(err) return next(err);
+    if(!doc) {
+      err = new Error('Not Found');
+      err.status = 404;
+      return next(err);
+    }
+    req.question = doc;
+    return next();
+  });
+});
+
 // GET /questions
   // Route for returning questions collection
 router.get('/', function(req, res, next) {
@@ -33,10 +46,8 @@ router.post('/', function (req, res, next) {
 
 // GET /questions/:qID
   // Route for returning a specific question
-router.get('/:qID', function (req, res) {
-  res.json({
-    response: "You sent me a GET request for a specific ID " + req.params.qID,
-  });
+router.get('/:qID', function (req, res, next) {
+  res.json(req.question);
 });
 
 // POST /questions/:qID/answers
