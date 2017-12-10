@@ -11,7 +11,7 @@ const questions = require('./models').Question;
 
 // Preload function for get question
 router.param('qID', function(req, res, next, id) {
-  Question.findById(id, function(err, doc) {
+  questions.findById(id, function(err, doc) {
     if(err) return next(err);
     if(!doc) {
       err = new Error('Not Found');
@@ -48,7 +48,7 @@ router.get('/', function(req, res, next) {
 // POST /questions
   // Route for creating questions
 router.post('/', function (req, res, next) {
-  var question = new Question(req.body);
+  var question = new questions(req.body);
   question.save(function(err, question) {
     if(err) return next(err);
     res.status(201);
