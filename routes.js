@@ -6,20 +6,28 @@ const express = require('express');
 // Setting up the express router
 const router = express.Router();
 
+// Importing questions model
+const questions = require('./models').Question;
+
 // GET /questions
   // Route for returning questions collection
-router.get('/', function (req, res) {
-  res.json({
-    response: "You sent me a GET request"
-  });
+router.get('/', function(req, res, next) {
+  Question.find({})
+          .sort({createdAt: -1})
+          .exec(function(err, questions) {
+            if(err) return next(err);
+            res,json(questions);
+          });
 });
 
 // POST /questions
   // Route for creating questions
-router.post('/', function (req, res) {
-  res.json({
-    response: "You sent me a POST request",
-    body: req.body
+router.post('/', function (req, res, next) {
+  var question = new Question(req.body);
+  question.save(function(err, question) {
+    if(err) return next(err);
+    res.status(201);
+    res.json(question);
   });
 });
 
