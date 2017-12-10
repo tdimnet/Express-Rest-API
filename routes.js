@@ -111,17 +111,19 @@ router.post(
       err.status = 404;
       next(err);
     } else {
+      req.vote = req.params.dir;
       next();
     }
   },
   // This case is when there are no erros to display
-  function (req, res) {
-  res.json({
-    response: "You sent me a POST request to /vote-" + req.params.dir,
-    questionId: req.params.qID,
-    answerId: req.params.aID,
-    vote: req.params.dir
-  });
+  function (req, res, next) {
+    req.answer.vote(
+      req.vote,
+      function(err, question) {
+        if(err) return next(err);
+        res.json(question);
+      }
+    );
 });
 
 // Exporting the router
