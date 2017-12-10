@@ -9,7 +9,8 @@ const router = express.Router();
 // Importing questions model
 const questions = require('./models').Question;
 
-router.params('qID', function(req, res, next, id) {
+// Preload function for get question
+router.param('qID', function(req, res, next, id) {
   Question.findById(id, function(err, doc) {
     if(err) return next(err);
     if(!doc) {
@@ -20,6 +21,17 @@ router.params('qID', function(req, res, next, id) {
     req.question = doc;
     return next();
   });
+});
+
+// Preaload function for get answer
+router.param('aID', function(req, res, next, id) {
+  req.answer = req.question.answers.id(id);
+  if(!req.answer) {
+    err = new Error('Not Found');
+    err.status = 404;
+    return next(err);
+  }
+  next();
 });
 
 // GET /questions
@@ -52,11 +64,12 @@ router.get('/:qID', function (req, res, next) {
 
 // POST /questions/:qID/answers
   // Route for creating an answer
-router.post('/:qID/answers', function (req, res) {
-  res.json({
-    response: "You sent me a POST request to /answers",
-    questionId: req.params.qID,
-    body: req.body
+router.post('/:qID/answers', function (req, res, next) {
+  req.question.answers.push(req.body);
+  req.question.save(function(err, question) {
+    if(err) return next(err);
+    res.status(201);
+    res.json(question);
   });
 });
 
@@ -64,22 +77,24 @@ router.post('/:qID/answers', function (req, res) {
 // PUT /questions/:qID/answers/:aID
   // Edit a specific answer
 router.put('/:qID/answers/:aID', function (req, res) {
-  res.json({
-    response: "You sent me a PUT request to a specific answer",
-    questionId: req.params.qID,
-    answerId: req.params.aID,
-    body: req.body
-  });
+  req.answer.update(
+    req.body,
+    function(err, result) {
+      if(err) return next(err);
+      res.json(result);
+    }
+  );
 });
 
 
 // DELETE /questions/:qID/answers/:aID
   // Delete a specific answer
-router.delete('/:qID/answers/:aID', function (req, res) {
-  res.json({
-    response: "You sent me a DELETE request to a specific answer",
-    questionId: req.params.qID,
-    answerId: req.params.aID,
+router.delete('/:qID/answers/:aID', function (req, res, next) {
+  req.answer.remove(function(err) {
+    req.question.save(function(err, question) {
+      if(err) return next(err);
+      res.json(question);
+    });
   });
 });
 
