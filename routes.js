@@ -37,11 +37,11 @@ router.param('aID', function(req, res, next, id) {
 // GET /questions
   // Route for returning questions collection
 router.get('/', function(req, res, next) {
-  Question.find({})
+  questions.find({})
           .sort({createdAt: -1})
           .exec(function(err, questions) {
             if(err) return next(err);
-            res,json(questions);
+            res.json(questions);
           });
 });
 
